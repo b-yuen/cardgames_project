@@ -16,25 +16,34 @@ class card:
     def __init__(self, card_id):
         self.check_id(card_id)
         self.id = card_id
-        self.value = self.calc_value()
+        self.rank_id = int(self.id / 4)
+        self.suit_id = self.id % 4
+#        self.value = self.calc_value()
+        self.value = self.id
         
     def check_id(self, card_id):
         if not 0 <= card_id <= 51:
             raise Exception('Invalid card id. Must be in range [0,51]')
             
-    def calc_value(self):
-        rank_id = self.id % 13
-        suit_id = int(self.id / 13)
-        val = 4 * rank_id + suit_id
-        return val
+#    def calc_value(self):
+##        rank_id = self.id % 13
+#        rank_id = int(self.id / 4)
+##        suit_id = int(self.id / 13)
+#        suit_id = self.id % 4
+#        val = 4 * rank_id + suit_id
+#        return val
     
     def rank(self):
-        rank_id = self.id % 13
-        return card.ranks[rank_id]
+#        rank_id = self.id % 13
+#        rank_id = int(self.id / 4)
+#        return card.ranks[rank_id]
+        return card.ranks[self.rank_id]
         
     def suit(self):
-        suit_id = int(self.id / 13)
-        return card.suits[suit_id]
+##        suit_id = int(self.id / 13)
+#        suit_id = self.id % 4
+#        return card.suits[suit_id]
+        return card.suits[self.suit_id]
     
     def is_face(self):
         return type(self.rank()) == str
@@ -72,7 +81,7 @@ class deck:
     def removecards(self, cardstoremove):
         newdeck = np.array([], dtype = object)
         for el in self.cards:
-            if el != cardstoremove: # correct to work for an array of cards to remove
+            if el not in cardstoremove: # check in by value no by object id due to __eq__ method in card
                 newdeck = np.append(newdeck, el)
         self.cards = newdeck
         
